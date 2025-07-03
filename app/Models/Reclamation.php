@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Reclamation extends Model
 {
@@ -34,5 +35,17 @@ class Reclamation extends Model
         return $this->belongsTo(User::class, 'technicien_id');
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($reclamation) {
+            $prefix = 'R-';
+            $date = now()->format('Ymd'); // ex: 20250704
+            $random = strtoupper(Str::random(4)); // ex: A4F3
+
+            $reclamation->numero = $prefix . $date . '-' . $random;
+        });
+    }
 
 }
