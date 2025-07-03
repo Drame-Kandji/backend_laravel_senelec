@@ -18,9 +18,8 @@ class StatistiqueController extends Controller
             'total_reclamations' => Reclamation::count(),
 
             'reclamations_par_statut' => [
-                'en_attente' => Reclamation::where('statut', 'en attente')->count(),
-                'traitee'    => Reclamation::where('statut', 'traitée')->count(),
-                'rejetee'    => Reclamation::where('statut', 'rejetée')->count(),
+                'en attente' => Reclamation::where('statut', 'en attente')->count(),
+                'traitee'    => Reclamation::where('statut', 'traitee')->count(),
             ],
 
             'reclamations_par_categorie' => Category::withCount('reclamations')->get()->map(function ($cat) {
@@ -44,18 +43,33 @@ class StatistiqueController extends Controller
      * Réclamations pour un utilisateur donné
      */
     public function reclamationsParUtilisateur($id): JsonResponse
-{
-    $user = User::with('reclamations.category')->findOrFail($id);
+    {
+        $user = User::with('reclamations.category')->findOrFail($id);
 
-    $reclamations = $user->reclamations;
+        $reclamations = $user->reclamations;
 
-    return response()->json([
-        'user' => $user,
-        'total_reclamations' => $reclamations->count(),
-        'reclamations' => $reclamations,
-        'reclamations_en_attente' => $reclamations->where('statut', 'en attente')->values(),
-        'reclamations_traitees' => $reclamations->where('statut', 'traitée')->values(),
-    ]);
-}
+        return response()->json([
+            'user' => $user,
+            'total_reclamations' => $reclamations->count(),
+            'reclamations' => $reclamations,
+            'reclamations_en_attente' => $reclamations->where('statut', 'en attente')->values(),
+            'reclamations_traitees' => $reclamations->where('statut', 'traitée')->values(),
+        ]);
+    }
+
+    public function statistiquesParRole(): JsonResponse
+    {
+        $roles = ['client', 'technicien', 'encadreur', 'admin', 'directeur'];
+
+        $statistiques = [];
+
+        foreach ($roles as $role) {
+            $statistiques[$role] = User::where('role', $role)->count();
+        }
+
+        return response()->json([
+            'statistiques_utilisateurs' => $statistiques
+        ]);
+    }
 
 }

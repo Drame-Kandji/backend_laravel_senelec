@@ -71,4 +71,39 @@ class ReclamationController extends Controller
         'reclamation' => $reclamation
     ]);
 }
+
+
+    public function cloturerReclamation(Request $request, $id)
+    {
+        $reclamation = Reclamation::findOrFail($id);
+        $user= Auth::user();
+        // Vérifier si l'utilisateur connecté est bien le technicien assigné
+        if (!$user || $user->role !== 'technicien' ||$user->role !== 'encadreur') {
+            return response()->json(['message' => 'Accès refusé. Vous n’êtes pas le technicien assigné.'], 403);
+        }
+
+        if ($reclamation->statut === 'traitee') {
+            return response()->json(['message' => 'Réclamation déjà traitée.'], 400);
+        }
+
+        $reclamation->statut = 'traite';
+        $reclamation->save();
+
+        return response()->json([
+            'message' => 'Réclamation clôturée avec succès.',
+            'reclamation' => $reclamation
+        ]);
+    }
+
+    public function reclamationsParClient($id)
+    {
+        $client = User::where('role', 'client')->with('reclamations.category')->findOrFail($id);
+
+        return response()->json([
+            'client' => $client->prenom . ' ' . $client->nom,
+            'total' => $client->reclamations->count(),
+            'reclamations' => $client->reclamations
+        ]);
+}
+
 }

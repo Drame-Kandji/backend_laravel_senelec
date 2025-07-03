@@ -29,5 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::put('/reclamations/{id}/assign-technicien', [ReclamationController::class, 'assignTechnicien']);
+Route::middleware('auth:sanctum')->put('/reclamations/{id}/cloturer', [ReclamationController::class, 'cloturerReclamation']);
+Route::get('/statistiques/utilisateurs', [StatistiqueController::class, 'statistiquesParRole']);
+
+Route::middleware('auth:sanctum')->get('/mes-reclamations/{id}', [ReclamationController::class, 'reclamationsParClient']);
+
 
 
