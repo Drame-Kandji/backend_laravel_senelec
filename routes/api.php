@@ -14,25 +14,26 @@ Route::get('/me', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-    Route::post('/logout', [authController::class, 'logout']);
+Route::post('/logout', [authController::class, 'logout']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reclamations', [ReclamationController::class, 'index']);
     Route::post('/reclamations', [ReclamationController::class, 'store']);
     Route::get('/reclamations/{id}', [ReclamationController::class, 'show']);
-});
+// });
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::get('/stats', [StatistiqueController::class, 'index']);
     Route::get('/stats/user/{id}', [StatistiqueController::class, 'reclamationsParUtilisateur']);
-});
+// });
 
 Route::put('/reclamations/{id}/assign-technicien', [ReclamationController::class, 'assignTechnicien']);
-Route::middleware('auth:sanctum')->put('/reclamations/{id}/cloturer', [ReclamationController::class, 'cloturerReclamation']);
+Route::put('/reclamations/{id}/cloturer', [ReclamationController::class, 'cloturerReclamation']);
 Route::get('/statistiques/utilisateurs', [StatistiqueController::class, 'statistiquesParRole']);
 
 Route::middleware('auth:sanctum')->get('/mes-reclamations/{id}', [ReclamationController::class, 'reclamationsParClient']);
 
 
 
+// middleware('auth:sanctum')->
