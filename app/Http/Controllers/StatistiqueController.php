@@ -44,13 +44,18 @@ class StatistiqueController extends Controller
      * Réclamations pour un utilisateur donné
      */
     public function reclamationsParUtilisateur($id): JsonResponse
-    {
-        $user = User::with('reclamations.category')->findOrFail($id);
+{
+    $user = User::with('reclamations.category')->findOrFail($id);
 
-        return response()->json([
-            'user' => $user->prenom . ' ' . $user->nom,
-            'total_reclamations' => $user->reclamations->count(),
-            'reclamations' => $user->reclamations
-        ]);
-    }
+    $reclamations = $user->reclamations;
+
+    return response()->json([
+        'user' => $user,
+        'total_reclamations' => $reclamations->count(),
+        'reclamations' => $reclamations,
+        'reclamations_en_attente' => $reclamations->where('statut', 'en attente')->values(),
+        'reclamations_traitees' => $reclamations->where('statut', 'traitée')->values(),
+    ]);
+}
+
 }

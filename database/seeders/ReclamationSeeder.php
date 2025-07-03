@@ -16,7 +16,7 @@ class ReclamationSeeder extends Seeder
         $categories = Category::take(4)->get();
 
         $types = ['Technique', 'Facturation', 'Compteur', 'Service'];
-        $statuts = ['en attente', 'traitée', 'rejetée'];
+        $statuts = ['en attente', 'traitée'];
 
         foreach ($users as $index => $user) {
             Reclamation::create([

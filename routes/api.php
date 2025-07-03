@@ -27,3 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/stats', [StatistiqueController::class, 'index']);
     Route::get('/stats/user/{id}', [StatistiqueController::class, 'reclamationsParUtilisateur']);
 });
+
+Route::put('/reclamations/{id}/assign-technicien', [ReclamationController::class, 'assignTechnicien']);
+
+

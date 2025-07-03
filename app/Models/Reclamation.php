@@ -17,6 +17,7 @@ class Reclamation extends Model
         'date',
         'type',
         'statut',
+        'technicien_id'
     ];
 
     public function user()
@@ -28,4 +29,10 @@ class Reclamation extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function technicien()
+    {
+        return $this->belongsTo(User::class, 'technicien_id');
+    }
+
+
 }
